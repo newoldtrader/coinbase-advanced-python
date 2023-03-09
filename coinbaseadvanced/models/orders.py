@@ -246,7 +246,9 @@ class Order:
                  reject_message: str = None,
                  cancel_message: str = None,
 
-                 order_error: dict = None) -> None:
+                 order_error: dict = None,
+                 **kwargs
+                 ) -> None:
         self.order_id = order_id
         self.product_id = product_id
         self.side = side
@@ -280,6 +282,9 @@ class Order:
         self.cancel_message = cancel_message
 
         self.order_error = OrderError(**order_error) if order_error is not None else None
+        # Add any unknown (key, value) pairs in the response to the class attributes
+        for k, v in kwargs.items():
+            self.__dict__[k] = v
 
     @classmethod
     def from_create_order_response(cls, response: requests.Response) -> 'Order':
